@@ -27,7 +27,7 @@ steps:
 
 ### `version`
 
-The version of Pesde to install.\
+The version of Pesde to install. Semantic Version can be used on top of options.\
 **Default:** `latest`\
 **Options:**
 * **'latest':** Latest release of Pesde.

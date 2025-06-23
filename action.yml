@@ -22,7 +22,7 @@ runs:
   steps:
     - name: Restore/Cache Pesde
       id: pesde-cache
-      if: ${{ inputs.cache == true || inputs.cache == 'true' }}
+      if: ${{ (inputs.cache == true || inputs.cache == 'true') }} 
       uses: actions/cache@v4
       with:
         path: |
