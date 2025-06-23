@@ -5,5 +5,8 @@ license = "MIT"
 [target]
 environment = "lune"
 
+[engines]
+lune = '=0.8.9'
+
 [indices]
 default = "https://github.com/daimond113/pesde-index"
