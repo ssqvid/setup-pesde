@@ -92,6 +92,7 @@ runs:
         chmod +x pesde
         
     - run: ./pesde self-install
+      shell: bash
 
     - name: Add bins to PATH
       if: runner.os == 'Windows'
