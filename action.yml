@@ -7,7 +7,7 @@ inputs:
     required: false
   cache:
     description: "Whether or not to cache the Pesde install"
-    default: "false"
+    default: false
     required: false
   token:
     description: "Token for publishing to the Pesde registry"
@@ -20,7 +20,17 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Restore/Cache Pesde
+      id: pesde-cache
+      if: ${{ inputs.cache == true || inputs.cache == 'true' }}
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.pesde
+        key: ${{ runner.os }}-Pesde-${{ hashFiles(format('{0}/{1}', inputs.path, 'pesde.toml')) }}
+
     - name: Download releases
+      if: inputs.version != 'build' && steps.cache-pesde.outputs.cache-hit != 'true'
       shell: bash
       env:
         GITHUB_TOKEN: ${{ github.token }}
@@ -37,53 +47,75 @@ runs:
         esac
 
         gh release download ${{ inputs.version }} -R pesde-pkg/pesde -p "$pattern"
-        gh release download -R lune-org/lune -p "$pattern"
 
+    - name: Build Pesde
+      if: inputs.version == 'build' && steps.cache-pesde.outputs.cache-hit != 'true'
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      run: |
+        case ${{ runner.arch }} in
+          "X86" | "X64") arch="x86_64" ;;
+          "ARM" | "ARM64") arch="aarch64" ;;
+        esac
+
+        case ${{ runner.os }} in
+          Linux) target="$arch-unknown-linux-gnu" ;;
+          macOS) target="$arch-apple-darwin" ;;
+          Windows) target="$arch-pc-windows-msvc" ;;
+        esac
+
+        git clone https://github.com/pesde-pkg/pesde
+        mv pesde pesde_repo
+
+        if ${{ runner.os == 'Linux' }} then
+          sudo apt-get update
+          sudo apt-get install libdbus-1-dev pkg-config
+        fi
+
+        cargo build --bins --all-features --release --target ${{ target }} --locked --manifest-path pesde_repo/Cargo.toml
+        
+        if ${{ runner.os == 'Windows' }}
+          mv pesde_repo/target/${{ target }}/release/pesde.exe pesde.exe
+        else
+          mv pesde_repo/target/${{ target }}/release/pesde pesde
+        fi
+        
     - name: Install releases
+      if: inputs.version != 'build' && steps.cache-pesde.outputs.cache-hit != 'true'
       shell: bash
       run: |
-        for file in lune pesde; do
-          mv ${file}*.zip ${file}.zip
-          unzip ${file}.zip
-          chmod +x ${file}
-        done
-
-        # Move Lune bin to HOME
-        mkdir -p ~/.lune/bin
-        mv lune ~/.lune/bin/lune
-
-        ./pesde self-install
+        mv pesde*.zip pesde.zip
+        unzip pesde.zip
+        chmod +x pesde
+        
+    - run: ./pesde self-install
 
     - name: Add bins to PATH
       if: runner.os == 'Windows'
       shell: powershell
       run: |
         echo "$HOME/.pesde/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-        echo "$HOME/.lune/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
     - name: Add bins to PATH
       if: runner.os != 'Windows'
       shell: bash
       run: |
-        echo -e "$HOME/.pesde/bin\n$HOME/.lune/bin" >> $GITHUB_PATH
+        echo -e "$HOME/.pesde/bin" >> $GITHUB_PATH
 
     - name: Remove artifacts
       shell: bash
       run: |
-        rm pesde.zip lune.zip
         if ${{ runner.os == 'Windows' }}; then
           rm pesde.exe
         else
           rm pesde
         fi
-
-    - name: Cache Pesde
-      if: ${{ inputs.cache == true || inputs.cache == 'true' }}
-      uses: actions/cache@v4
-      with:
-        path: |
-          ~/.pesde
-        key: ${{ runner.os }}-pesde-${{hashFiles(format('{0}/{1}', inputs.path, 'pesde.toml'))}}
+        if ${{ inputs.version == 'build' }}; then
+          rm -r pesde_repo
+        else
+          rm pesde.zip
+        fi
 
     - name: Authenticate with Pesde
       if: inputs.token != ''

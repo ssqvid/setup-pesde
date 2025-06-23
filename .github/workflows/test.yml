@@ -20,6 +20,8 @@ jobs:
 
   test:
     uses: ./.github/workflows/env.yml
-    with:
-      cache: false
 
+  test-build:
+    uses: ./.github/workflows/env.yml
+    with:
+      version: build
