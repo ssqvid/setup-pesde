@@ -73,13 +73,15 @@ runs:
           sudo apt-get install libdbus-1-dev pkg-config
         fi
 
-        cargo build --bins --all-features --release --target ${{ target }} --locked --manifest-path pesde_repo/Cargo.toml
+        cargo build --bins --all-features --release --target "$target" --locked --manifest-path pesde_repo/Cargo.toml
         
         if ${{ runner.os == 'Windows' }}
-          mv pesde_repo/target/${{ target }}/release/pesde.exe pesde.exe
+          mv pesde_repo/target/"$target"/release/pesde.exe pesde.exe
         else
-          mv pesde_repo/target/${{ target }}/release/pesde pesde
+          mv pesde_repo/target/"$target"/release/pesde pesde
         fi
+
+        chmod +x pesde
         
     - name: Install releases
       if: inputs.version != 'build' && steps.cache-pesde.outputs.cache-hit != 'true'
