@@ -29,8 +29,8 @@ steps:
 
 The version of Pesde to install.\
 **Default:** `latest`
-**Options:** 
-    **'latest':** Latest release of Pesde.
+**Options:**\
+    **'latest':** Latest release of Pesde.\
     **'build':** Builds Pesde from source.
 
 ### `path`
@@ -42,7 +42,7 @@ Whether or not to cache the Pesde install and packages.\
 **Default:** `false`
 
 ### `token`
-The security token used for publishing to the Pesde marketplace.\
+The security token used for publishing to the Pesde marketplace.
 
 ## Forks
 
