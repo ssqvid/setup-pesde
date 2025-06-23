@@ -92,6 +92,7 @@ runs:
         chmod +x pesde
         
     - run: ./pesde self-install
+      if: steps.cache-pesde.outputs.cache-hit != 'true'
       shell: bash
 
     - name: Add bins to PATH
@@ -107,6 +108,7 @@ runs:
         echo -e "$HOME/.pesde/bin" >> $GITHUB_PATH
 
     - name: Remove artifacts
+      if: steps.cache-pesde.outputs.cache-hit != 'true'
       shell: bash
       run: |
         if ${{ runner.os == 'Windows' }}; then
