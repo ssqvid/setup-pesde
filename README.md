@@ -29,8 +29,8 @@ steps:
 
 The version of Pesde to install.\
 **Default:** `latest`\
-**Options:**\
-* **'latest':** Latest release of Pesde.\
+**Options:**
+* **'latest':** Latest release of Pesde.
 * **'build':** Builds Pesde from source.
 
 ### `path`
