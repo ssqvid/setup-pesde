@@ -28,10 +28,10 @@ steps:
 ### `version`
 
 The version of Pesde to install.\
-**Default:** `latest`
+**Default:** `latest`\
 **Options:**\
-    **'latest':** Latest release of Pesde.\
-    **'build':** Builds Pesde from source.
+* **'latest':** Latest release of Pesde.\
+* **'build':** Builds Pesde from source.
 
 ### `path`
 The path of where the Pesde config file is located.\
