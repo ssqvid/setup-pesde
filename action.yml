@@ -29,7 +29,7 @@ runs:
           ~/.pesde
         key: ${{ runner.os }}-Pesde-${{ hashFiles(format('{0}/{1}', inputs.path, 'pesde.toml')) }}
 
-    - name: Download releases
+    - name: Download release
       if: inputs.version != 'build' && steps.cache-pesde.outputs.cache-hit != 'true'
       shell: bash
       env:
@@ -52,6 +52,7 @@ runs:
           else
             version = 'v${{ inputs.version }}'
           fi
+        fi
 
         gh release download "$version" -R pesde-pkg/pesde -p "$pattern"
 
