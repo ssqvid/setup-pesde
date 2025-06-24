@@ -46,7 +46,7 @@ runs:
           Windows) pattern="*-windows-$fileArch.zip" ;;
         esac
 
-        if [ '${{ ${{inputs.version}}:0:1 }}' == 'v'] then
+        if [ ${ ${{inputs.version}}:0:1 } == 'v'] then
           version = ${{ inputs.version }}
         else
           version = 'v${{ inputs.version}}'
