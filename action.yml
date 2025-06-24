@@ -46,11 +46,12 @@ runs:
           Windows) pattern="*-windows-$fileArch.zip" ;;
         esac
 
-        if [ ${ ${{inputs.version}}:0:1 } == 'v' ]; then
-          version = ${{ inputs.version }}
-        else
-          version = 'v${{ inputs.version }}'
-        fi
+        if [${ #${{ inputs.version }} } > 0]; then
+          if [ ${ ${{inputs.version}}:0:1 } == 'v' ]; then
+            version = ${{ inputs.version }}
+          else
+            version = 'v${{ inputs.version }}'
+          fi
 
         gh release download "$version" -R pesde-pkg/pesde -p "$pattern"
 
