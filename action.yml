@@ -76,14 +76,14 @@ runs:
         git clone https://github.com/pesde-pkg/pesde
         mv pesde pesde_repo
 
-        if [${{ runner.os }} == 'Linux']; then
+        if ${{ runner.os == 'Linux' }}; then
           sudo apt-get update
           sudo apt-get install libdbus-1-dev pkg-config
         fi
 
         cargo build --bins --all-features --release --target "$target" --locked --manifest-path pesde_repo/Cargo.toml
         
-        if [${{ runner.os }} == 'Windows' ]; then
+        if ${{ runner.os == 'Windows' }}; then
           mv pesde_repo/target/"$target"/release/pesde.exe pesde.exe
         else
           mv pesde_repo/target/"$target"/release/pesde pesde
@@ -119,12 +119,12 @@ runs:
       if: steps.cache-pesde.outputs.cache-hit != 'true'
       shell: bash
       run: |
-        if [${{ runner.os }} == 'Windows']; then
+        if ${{ runner.os == 'Windows' }}; then
           rm pesde.exe
         else
           rm pesde
         fi
-        if [${{ inputs.version }} == 'build']; then
+        if ${{ inputs.version == 'build' }}; then
           rm -r pesde_repo
         else
           rm pesde.zip
