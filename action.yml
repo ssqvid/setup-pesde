@@ -46,7 +46,13 @@ runs:
           Windows) pattern="*-windows-$fileArch.zip" ;;
         esac
 
-        gh release download ${{ inputs.version }} -R pesde-pkg/pesde -p "$pattern"
+        if [ '${{ inputs.version:0:1 }}' == 'v'] then
+          version = ${{ inputs.version }}
+        else
+          version = 'v${{ inputs.version}}'
+        fi
+
+        gh release download "$version" -R pesde-pkg/pesde -p "$pattern"
 
     - name: Build Pesde
       if: inputs.version == 'build' && steps.cache-pesde.outputs.cache-hit != 'true'
