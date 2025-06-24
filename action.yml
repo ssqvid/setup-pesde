@@ -46,11 +46,11 @@ runs:
           Windows) pattern="*-windows-$fileArch.zip" ;;
         esac
 
-        if ! [ -z ${{ inputs.version }} ]; then
-          if [ ${ ${{inputs.version}}:0:1 } == 'v' ]; then
-            version = ${{ inputs.version }}
+        if [[ -n ${{ inputs.version }} ]]; then
+          if [[ '${ ${{inputs.version}}:0:1 }' == 'v' ]]; then
+            version=${{ inputs.version }}
           else
-            version = 'v${{ inputs.version }}'
+            version="v${{ inputs.version }}"
           fi
         fi
 
