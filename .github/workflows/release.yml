@@ -33,7 +33,7 @@ jobs:
     permissions:
       pull_requests: read
     needs: [prepare]
-    if: ${{ needs.prepare.outputs.passed }}
+    if: ${{ needs.prepare.outputs.passed == 'true' || needs.prepare.outputs.passed == true }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
