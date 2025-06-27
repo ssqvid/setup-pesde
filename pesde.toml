@@ -1,0 +1,13 @@
+name = "ssqvid/setup_pesde"
+version = "0.1.0"
+description = "A github action that installs the Pesde CLI along with Lune"
+license = "MIT"
+
+[target]
+environment = "lune"
+
+[indices]
+default = "https://github.com/pesde-pkg/index"
+
+[dependencies]
+hello = { name = 'pesde/hello', version = '1.0.2', target = 'lune' }
