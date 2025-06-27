@@ -1,7 +1,7 @@
 [project]
 name = "setup-pesde"
-version = "0.0.1"
-description = "Physics simulator I made for fun and as a school project."
+version = "1.0.0"
+description = "A github action that installs the Pesde CLI along with Lune"
 readme = "README.md"
 requires-python = ">=3.13"
 license = "MIT"
@@ -17,7 +17,6 @@ include = ["python"]
 line-length = 100
 target-version = "py313"
 fix = true
-extend-exclude = ["src/JES.py"]
 
 [tool.ruff.analyze]
 detect-string-imports = true

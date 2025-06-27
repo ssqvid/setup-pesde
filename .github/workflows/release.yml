@@ -1,0 +1,59 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  prepare:
+    name: Prepare
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get_version.outputs.value }}
+      passed_tests: ${{ steps.run_tests.outputs.passed }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get Version
+        id: get_version
+        uses: SebRollen/toml-action@v1.0.2
+        with:
+          file: "./pyproject.toml"
+          field: "project.version"
+
+      - name: Run Tests
+        id: run_tests
+        uses: ./.github/workflows/test.yml
+
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    permissions:
+      pull_requests: read
+    needs: [prepare]
+    if: ${{ needs.prepare.outputs.passed }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check if version is pre-release
+        id: is_prerelease
+        shell: bash
+        run: |
+          if [[ "${{ needs.prepare.outputs.version }}" == *"-"* ]]; then
+            echo "value=true" >> $GITHUB_OUTPUT
+          else
+            echo "value=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ github.ref_name }}
+          name: v${{ needs.prepare.outputs.version }}
+          draft: true
+          prerelease: ${{ steps.is_prerelease.outputs.value }}

@@ -1,14 +1,12 @@
-# lumin/setup-pesde
+# ssqvid/setup-pesde
 
-[![version](https://img.shields.io/github/v/release/lumin-org/setup-pesde?style=plastic&logo=github&logoColor=FFFFFF&label=version)](https://github.com/lumin-org/setup-pesde/releases/latest)
-[![test](https://img.shields.io/github/actions/workflow/status/lumin-org/setup-pesde/test.yml?style=plastic&logo=github&logoColor=FFFFFF&label=test)](https://github.com/lumin-org/setup-pesde/blob/main/.github/workflows/test.yml)
-[![discord](https://img.shields.io/discord/1105688855375511642?logo=discord&logoColor=white&label=chat&color=4d3dff&style=plastic)](https://lumin-org.github.io/to/discord)
+[![test](https://img.shields.io/github/actions/workflow/status/ssqvid/setup-pesde/test.yml?style=plastic&logo=github&logoColor=FFFFFF&label=test)](https://github.com/ssqvid/setup-pesde/blob/main/.github/workflows/test.yml)
 
 A github action that installs the Pesde CLI along with Lune 
 
 ## Prerequisites
 
-In order to use **lumin/setup-pesde** you must be using one of the following server types:
+In order to use **ssqvid/setup-pesde** you must be using one of the following server types:
 
 * [`macOS`](https://en.wikipedia.org/wiki/macOS)
 * [`Linux`](https://en.wikipedia.org/wiki/Linux)
@@ -20,14 +18,14 @@ Use the latest version of Pesde, with default parameters
 
 ```yaml
 steps:
-- uses: lumin-org/setup-pesde@v0.4.1
+- uses: ssqvid/setup-pesde@VERSION
 ```
 
 ## Inputs
 
 ### `version`
 
-The version of Pesde to install. Semantic Version can be used on top of options.\
+The version of Pesde to install. Semantic Version can be used on top of options, but pesde.toml engines field should be used over this.\
 **Default:** `latest`\
 **Options:**
 * **'latest':** Latest release of Pesde.
@@ -46,8 +44,8 @@ The security token used for publishing to the Pesde marketplace.
 
 ## Forks
 
-This project was forked from [`ok-nick/setup-aftman`](https://github.com/ok-nick/setup-aftman)
+This project was forked from [`axiom-co/setup-pesde`](https://github.com/axiom-co/setup-pesde)
 
 ## License
 
-This project is licensed under the [MIT](https://github.com/lumin-org/setup-pesde/blob/main/LICENSE) license
+This project is licensed under the [MIT](https://github.com/ssqvid/setup-pesde/blob/main/LICENSE) license

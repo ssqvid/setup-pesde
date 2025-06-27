@@ -7,6 +7,13 @@ on:
   pull_request:
     paths:
       - '**.yml'
+    tags-ignore:
+      - v*
+  workflow_call:
+    outputs:
+      passed:
+        type: boolean
+        value: ${{ jobs.test-cache.outputs.passed && jobs.test-build.passed && jobs.test-version.outputs.passed }}
 
 defaults:
   run:
