@@ -48,13 +48,21 @@ runs:
 
         if [[ -n "${{ inputs.version }}" ]]; then
           if [[ '${ ${{inputs.version}}:0:1 }' == 'v' ]]; then
-            version=${{ inputs.version }}
+            version=$(python python/title_to_tag.py "${{ inputs.version }}")
           else
-            version="v${{ inputs.version }}"
+            version=$(python python/title_to_tag.py "v${{ inputs.version }}")
           fi
         fi
 
         gh release download "$version" -R pesde-pkg/pesde -p "$pattern"
+
+    - name: Install releases
+      if: inputs.version != 'build' && steps.cache-pesde.outputs.cache-hit != 'true'
+      shell: bash
+      run: |
+        mv pesde*.zip pesde.zip
+        unzip pesde.zip
+        chmod +x pesde
 
     - name: Build Pesde
       if: inputs.version == 'build' && steps.cache-pesde.outputs.cache-hit != 'true'
@@ -89,14 +97,6 @@ runs:
           mv pesde_repo/target/"$target"/release/pesde pesde
         fi
 
-        chmod +x pesde
-        
-    - name: Install releases
-      if: inputs.version != 'build' && steps.cache-pesde.outputs.cache-hit != 'true'
-      shell: bash
-      run: |
-        mv pesde*.zip pesde.zip
-        unzip pesde.zip
         chmod +x pesde
         
     - run: ./pesde self-install
