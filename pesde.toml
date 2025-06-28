@@ -6,6 +6,9 @@ license = "MIT"
 [target]
 environment = "lune"
 
+[engines]
+lune = "^0.9.4"
+
 [indices]
 default = "https://github.com/pesde-pkg/index"
 
