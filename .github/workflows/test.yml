@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - '**.yml'
+      - 'pesde.toml'
+      - 'test/**'
   pull_request:
     paths:
       - '**.yml'
