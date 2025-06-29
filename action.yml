@@ -57,8 +57,10 @@ runs:
         gh release list -R pesde-pkg/pesde --json tagName,name >> versions.json
 
         for i in {0..24}; do
-          if [[ "${{ cat versions.json | jq .[$i].name" }}" == "$title" ]]; then
-            version="${{ cat versions.json | jq .[$i].tagName }}"
+          if [[ $( cat versions.json | jq .[$i].name" ) == "$title" ]]; then
+            version=$( cat versions.json | jq .[$i].tagName )
+          fi
+        done
 
         gh release download "$version" -R pesde-pkg/pesde -p "$pattern"
 
