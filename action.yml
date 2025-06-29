@@ -48,11 +48,17 @@ runs:
 
         if [[ -n "${{ inputs.version }}" ]]; then
           if [[ '${ ${{inputs.version}}:0:1 }' == 'v' ]]; then
-            version=$(python python/title_to_tag.py "${{ inputs.version }}")
+            title="${{ inputs.version }}"
           else
-            version=$(python python/title_to_tag.py "v${{ inputs.version }}")
+            title="v${{ inputs.version }}"
           fi
         fi
+
+        gh release list -R pesde-pkg/pesde --json tagName,name >> versions.json
+
+        for i in {0..24}; do
+          if [[ "${{ cat versions.json | jq .[$i].name" }}" == "$title" ]]; then
+            version="${{ cat versions.json | jq .[$i].tagName }}"
 
         gh release download "$version" -R pesde-pkg/pesde -p "$pattern"
 
