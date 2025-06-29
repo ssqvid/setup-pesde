@@ -62,6 +62,8 @@ runs:
           fi
         done
 
+        echo "$version"
+
         gh release download "$version" -R pesde-pkg/pesde -p "$pattern"
 
     - name: Install releases
