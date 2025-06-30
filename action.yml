@@ -55,7 +55,7 @@ runs:
           
           gh release list -R pesde-pkg/pesde --json tagName,name >> versions.json
 
-          max=$( cat "versions.json" | jq ".[$i].name" )
+          max=$( cat "versions.json" | jq ". | length" )
           for (( i = 0 ; i < $max ; i++ )); do
             if [[ $( cat "versions.json" | jq ".[$i].name" ) == $title ]]; then
               version=$( cat "versions.json" | jq ".[$i].tagName" )
