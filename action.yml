@@ -52,17 +52,20 @@ runs:
           else
             title="v${{ inputs.version }}"
           fi
+          
+          gh release list -R pesde-pkg/pesde --json tagName,name >> versions.json
+
+          for i in {0..$( cat versions.json | jq ". | length" )}; do
+            if [[ $( cat versions.json | jq ".[$i].name" ) == $title ]]; then
+              version=$( cat versions.json | jq ".[$i].tagName" )
+              break
+            fi
+          done
+
+          rm versions.json
+        else
+          version=""
         fi
-
-        gh release list -R pesde-pkg/pesde --json tagName,name >> versions.json
-
-        for i in {0..$( cat versions.json | jq ". | length" )}; do
-          if [[ $( cat versions.json | jq ".[$i].name" ) == $title ]]; then
-            version=$( cat versions.json | jq ".[$i].tagName" )
-          fi
-        done
-
-        echo $version
 
         gh release download "$version" -R pesde-pkg/pesde -p "$pattern"
 
