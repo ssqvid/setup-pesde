@@ -47,7 +47,7 @@ runs:
         esac
 
         if [[ -n "${{ inputs.version }}" ]]; then
-          if [[ '${ ${{inputs.version}}:0:1 }' == 'v' ]]; then
+          if [[ '${ ${{ inputs.version }}:0:1 }' == 'v' ]]; then
             title="${{ inputs.version }}"
           else
             title="v${{ inputs.version }}"
@@ -55,7 +55,8 @@ runs:
           
           gh release list -R pesde-pkg/pesde --json tagName,name >> versions.json
 
-          for i in {0..$( cat "versions.json" | jq ". | length" )}; do
+          max=$( cat "versions.json" | jq ".[$i].name" )
+          for (( i = 0 ; i < $max ; i++ )); do
             if [[ $( cat "versions.json" | jq ".[$i].name" ) == $title ]]; then
               version=$( cat "versions.json" | jq ".[$i].tagName" )
               break
